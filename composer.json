@@ -1,0 +1,17 @@
+{
+    "name": "course/php-pdo-oci8",
+    "description": "Php with Pdo Oci8",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Willian Souza",
+            "email": "wrdigital@hotmail.com"
+        }
+    ],
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "Course\\":"app"
+        }
+    }
+}
