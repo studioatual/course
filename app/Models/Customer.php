@@ -4,7 +4,7 @@ namespace Course\Models;
 
 class Customer extends Model
 {
-    protected $table = 'HR.EMPLOYEES';
+    protected $table = 'customers';
     protected $fillable = [
         'id',
         'name',

@@ -7,11 +7,11 @@ $container->set('settings', [
         'url' => 'https://course.test',
     ],
     'db' => [
-        'host' => '127.0.0.1',
+        'host' => 'oracledb',
         'port' => '1521',
         'database' => 'xe',
-        'username' => 'system',
-        'password' => 'oracle',
+        'username' => 'course',
+        'password' => '123456',
         'charset' => 'utf8',
     ],
 ]);
