@@ -2,7 +2,9 @@
 
 namespace Course\Core;
 
-class Container
+use Course\Core\Contracts\ContainerInterface;
+
+class Container implements ContainerInterface
 {
     public function get($property)
     {

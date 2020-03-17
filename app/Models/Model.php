@@ -20,31 +20,25 @@ class Model
 
     public function create($params)
     {
-        
     }
 
     public function update($params)
     {
-
     }
 
-    public function delete()
+    public function delete($key)
     {
-        
     }
 
     public function get()
     {
-
     }
 
     public function all()
     {
-
     }
 
     public function first()
     {
-        
     }
 }

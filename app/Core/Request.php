@@ -2,7 +2,9 @@
 
 namespace Course\Core;
 
-class Request
+use Course\Core\Contracts\RequestInterface;
+
+class Request implements RequestInterface
 {
     protected $routes;
 
@@ -24,7 +26,7 @@ class Request
         return $_SERVER['REQUEST_METHOD'];
     }
 
-    public function setRoutes($routes)
+    public function setRoutes(array $routes)
     {
         $this->routes = $routes;
     }
@@ -45,7 +47,7 @@ class Request
         $list = array_values(array_filter(explode('/', $this->getURL())));
         $routes = $this->routes[$this->getMethod()];
 
-        for ($i = 0; $i<count($list); $i++) {
+        for ($i = 0; $i < count($list); $i++) {
             $routes = $this->filterRoutesEqual($i, $list, $routes);
             if (!$routes) {
                 $routes = $this->filterRoutesParams($i, $list, $this->routes[$this->getMethod()]);
@@ -59,7 +61,8 @@ class Request
         return $routes[0];
     }
 
-    private function filterRoutesEqual($i, $list, $routes) {
+    private function filterRoutesEqual($i, $list, $routes)
+    {
         return array_values(array_filter($routes, function ($route) use ($i, $list) {
             $r_list = array_values(array_filter(explode('/', $route['url'])));
             if (count($r_list) == count($list) && isset($r_list[$i]) && $r_list[$i] == $list[$i]) {
@@ -68,7 +71,8 @@ class Request
         }));
     }
 
-    private function filterRoutesParams($i, $list, $routes) {
+    private function filterRoutesParams($i, $list, $routes)
+    {
         foreach ($routes as $route) {
             $r_list = array_values(array_filter(explode('/', $route['url'])));
             if (count($r_list) == count($list) && isset($r_list[$i]) && strpos($r_list[$i], '{') !== false && strrpos($r_list[$i], '}') !== false) {
@@ -82,7 +86,7 @@ class Request
         $list = array_values(array_filter(explode('/', $this->getURL())));
         $r_list = array_values(array_filter(explode('/', $this->getRoute()['url'])));
         $params = [];
-        for ($i=0; $i<count($list); $i++) {
+        for ($i = 0; $i < count($list); $i++) {
 
             $init = strpos($r_list[$i], '{');
             $end = strrpos($r_list[$i], '}');
@@ -91,7 +95,6 @@ class Request
                 $name = substr($r_list[$i], $init + 1, $end - 1);
                 $params[$name] = $list[$i];
             }
-
         }
         return $params;
     }

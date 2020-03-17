@@ -2,7 +2,7 @@
 
 namespace Course\Core;
 
-use Exception;
+use Course\Core\Contracts\ContainerInterface;
 
 class App
 {
@@ -11,7 +11,7 @@ class App
     protected $container;
     protected $request;
 
-    public function __construct(Container $container)
+    public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
         $this->request = new Request();
@@ -30,7 +30,6 @@ class App
                 $method = $params[1];
                 return $controller->{$method}($this->request);
             }
-
             return $route['action']($this->request);
         } else {
             echo '<h1>Not Found</h1>';
