@@ -4,25 +4,25 @@ namespace Course\Core;
 
 trait Route {
 
-    protected $routes = ['get' => [], 'post' => [], 'put' => [], 'delete' => []];
+    protected $routes = ['GET' => [], 'POST' => [], 'PUT' => [], 'DELETE' => []];
 
     public function get(string $route, $action) {
-        $this->routes['get'][] = ['url' => $route, 'action' => $action];
+        $this->routes['GET'][] = ['url' => $route, 'action' => $action];
         return $this;
     }
 
     public function post(string $route, $action) {
-        $this->routes['post'][] = ['url' => $route, 'action' => $action];
+        $this->routes['POST'][] = ['url' => $route, 'action' => $action];
         return $this;
     }
 
     public function put(string $route, $action) {
-        $this->routes['put'][] = ['url' => $route, 'action' => $action];
+        $this->routes['PUT'][] = ['url' => $route, 'action' => $action];
         return $this;
     }
 
     public function delete(string $route, $action) {
-        $this->routes['delete'][] = ['url' => $route, 'action' => $action];
+        $this->routes['DELETE'][] = ['url' => $route, 'action' => $action];
         return $this;
     }
 }

@@ -19,6 +19,11 @@ class Request
         return $args;
     }
 
+    public function getMethod()
+    {
+        return $_SERVER['REQUEST_METHOD'];
+    }
+
     public function setRoutes($routes)
     {
         $this->routes = $routes;
@@ -26,63 +31,68 @@ class Request
 
     public function getRoute()
     {
-        $list = array_filter(explode('/', $this->getURL()));
-        $routes = $this->routes[$this->getMethod()];
-        for ($i = 0; $i < count($list); $i++) {
-            $routes = $this->filterRoutes(count($list), $i, $list[$i], $routes);
+        $url = $this->getURL();
+
+        if (!$url) {
+            $route = array_values(array_filter($this->routes[$this->getMethod()], function ($route) {
+                if ($route['url'] == '[/]' || $route['url'] == '/') {
+                    return $route;
+                }
+            }));
+            return $route[0];
         }
-        var_dump($routes);
+
+        $list = array_values(array_filter(explode('/', $this->getURL())));
+        $routes = $this->routes[$this->getMethod()];
+
+        for ($i = 0; $i<count($list); $i++) {
+            $routes = $this->filterRoutesEqual($i, $list, $routes);
+            if (!$routes) {
+                $routes = $this->filterRoutesParams($i, $list, $this->routes[$this->getMethod()]);
+            }
+        }
+
+        if (!$routes) {
+            return null;
+        }
+
+        return $routes[0];
     }
 
-    private function filterRoutes($total, $i, $val, $routes)
-    {
-        return array_filter($routes, function ($route) use ($total, $i, $val) {
-            $list = array_filter(explode('/', $route['url']));
-            if ($list[$i] == $val && $total == count($list)) {
+    private function filterRoutesEqual($i, $list, $routes) {
+        return array_values(array_filter($routes, function ($route) use ($i, $list) {
+            $r_list = array_values(array_filter(explode('/', $route['url'])));
+            if (count($r_list) == count($list) && isset($r_list[$i]) && $r_list[$i] == $list[$i]) {
                 return $route;
             }
-            if (strpos($list[$i], '{') !== false && strrpos($list[$i], '}') !== false && $total == count($list)) {
-                return $route;
-            }
-        });
+        }));
     }
 
-    public function getMethod()
-    {
-        return strtolower($_SERVER['REQUEST_METHOD']);
+    private function filterRoutesParams($i, $list, $routes) {
+        foreach ($routes as $route) {
+            $r_list = array_values(array_filter(explode('/', $route['url'])));
+            if (count($r_list) == count($list) && isset($r_list[$i]) && strpos($r_list[$i], '{') !== false && strrpos($r_list[$i], '}') !== false) {
+                return [$route];
+            }
+        }
     }
 
     public function getParams()
     {
-        $parts = array_filter(explode('/', $this->getRoute()));
-        $total = count($parts);
-        $routes = $this->getRoutesLength($total);
-        $list = [];
-        foreach ($routes as $route) {
-            $r_parts = explode('/', $this->getRoute());
-            $check = true;
+        $list = array_values(array_filter(explode('/', $this->getURL())));
+        $r_list = array_values(array_filter(explode('/', $this->getRoute()['url'])));
+        $params = [];
+        for ($i=0; $i<count($list); $i++) {
 
-            for ($i = 0; $i < $total; $i++) {
-                if ($parts[$i] != $r_parts[$i] && !$this->isParam($r_parts[$i])) {
-                    $check = false;
-                }
+            $init = strpos($r_list[$i], '{');
+            $end = strrpos($r_list[$i], '}');
+
+            if ($init !== false &&  $end !== false) {
+                $name = substr($r_list[$i], $init + 1, $end - 1);
+                $params[$name] = $list[$i];
             }
 
-            if ($check) {
-                $list[] = $route;
-            }
         }
-    }
-
-    private function isParam($slug)
-    {
-        return strpos($slug, '{') && strrpos($slug, '}');
-    }
-
-    private function getRoutesLength($total)
-    {
-        return array_filter($this->routes[$this->getMethod()], function ($route) use ($total) {
-            return $total == count(array_filter(explode('/', $route['url'])));
-        });
+        return $params;
     }
 }

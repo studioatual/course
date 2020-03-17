@@ -20,21 +20,20 @@ class App
     public function run()
     {
         $this->request->setRoutes($this->routes);
-        $this->request->getRoute();
-        /*
-        return array_filter($this->routes[$this->request->getMethod()], function ($value) {
-            if (($value['url'] == '[/]' && $this->request->getURL() == '') || $value['url'] == $this->request->getURL()) {
-                if (is_string($value['action'])) {
-                    $params = explode(':', $value['action']);
-                    $action = str_replace('.', '\\', $params[0]);
-                    $action = 'Course\\Controllers\\' . $action;
-                    $controller = new $action($this->container);
-                    $method = $params[1];
-                    return $controller->{$method}($this->request);
-                }
-                return $value['action']($this->request);
+        $route = $this->request->getRoute();
+        if ($route) {
+            if (is_string($route['action'])) {
+                $params = explode(':', $route['action']);
+                $action = str_replace('.', '\\', $params[0]);
+                $action = 'Course\\Controllers\\' . $action;
+                $controller = new $action($this->container);
+                $method = $params[1];
+                return $controller->{$method}($this->request);
             }
-        });
-        */
+
+            return $route['action']($this->request);
+        } else {
+            echo '<h1>Not Found</h1>';
+        }
     }
 }

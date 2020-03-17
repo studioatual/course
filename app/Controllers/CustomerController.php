@@ -9,8 +9,9 @@ class CustomerController extends Controller
         return $this->view('customer', ['title' => 'Customers', 'customers' => []]);
     }
 
-    public function show()
+    public function show($request)
     {
-        return 'ok';
+        $params = $request->getParams();
+        echo '<h1>Show Customer '.$params['id'].'</h1>';
     }
 }

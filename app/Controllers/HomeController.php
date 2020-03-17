@@ -6,6 +6,6 @@ class HomeController extends Controller
 {
     public function index($request)
     {
-        return $this->view('index', ['title' => 'Home']);
+        return $this->view('home', ['title' => 'Home']);
     }
 }
