@@ -48,9 +48,11 @@ class Request implements RequestInterface
         $routes = $this->routes[$this->getMethod()];
 
         for ($i = 0; $i < count($list); $i++) {
-            $routes = $this->filterRoutesEqual($i, $list, $routes);
-            if (!$routes) {
-                $routes = $this->filterRoutesParams($i, $list, $this->routes[$this->getMethod()]);
+            if ($routes && count($routes)) {
+                $routes = $this->filterRoutesEqual($i, $list, $routes);
+                if (!$routes) {
+                    $routes = $this->filterRoutesParams($i, $list, $this->routes[$this->getMethod()]);
+                }
             }
         }
 

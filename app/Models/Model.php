@@ -2,6 +2,8 @@
 
 namespace Course\Models;
 
+use PDO;
+
 class Model
 {
     protected $table;
@@ -11,11 +13,10 @@ class Model
     protected $cast;
     protected $db;
 
-
-    public function __construct($container)
+    public function __construct()
     {
         $this->primaryKey = 'id';
-        $this->db = $container->get('db');
+        $this->db = $GLOBALS['db'];
     }
 
     public function create($params)
@@ -36,9 +37,13 @@ class Model
 
     public function all()
     {
+        $sql = "SELECT * FROM " . $this->table;
+        $query = $this->db->query($sql);
+        return $query->fetchAll(PDO::FETCH_OBJ);
     }
 
     public function first()
     {
+
     }
 }

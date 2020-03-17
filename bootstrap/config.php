@@ -10,8 +10,8 @@ $container->set('settings', [
         'host' => '127.0.0.1',
         'port' => '1521',
         'database' => 'xe',
-        'username' => 'course',
-        'password' => '123456',
+        'username' => 'system',
+        'password' => 'oracle',
         'charset' => 'utf8',
     ],
 ]);
