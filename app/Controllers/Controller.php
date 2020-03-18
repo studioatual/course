@@ -18,6 +18,11 @@ class Controller
         require_once __DIR__ . '/../../resources/views/' . $view . '.php';
     }
 
+    public function withRedirect(string $url)
+    {
+        header('location:' . $url);
+    }
+
     public function __get($property)
     {
         if (isset($this->container->{$property})) {
