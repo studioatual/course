@@ -87,7 +87,7 @@ class Request implements RequestInterface
     {
         $list = array_values(array_filter(explode('/', $this->getURL())));
         $r_list = array_values(array_filter(explode('/', $this->getRoute()['url'])));
-        $params = [];
+        $params = ($_POST) ? $_POST : [];
         for ($i = 0; $i < count($list); $i++) {
 
             $init = strpos($r_list[$i], '{');

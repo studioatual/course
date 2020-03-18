@@ -1,6 +1,12 @@
-<?php include __DIR__ . '/layout/header.php'; ?>
+<?php include __DIR__ . '/../layout/header.php'; ?>
 <div class="container page">
-    <h1><?= $data['title']; ?></h1>
+    <br />
+    <div class="row">
+        <div class="col-md-10">
+            <h1><?= $data['title']; ?></h1>
+        </div>
+        <div class="col-md-2" style="align-self: center;"><a href="/customers/create" class="btn btn-sm btn-block btn-success" style="vertical-align: middle;">New Customer</a></div>
+    </div>
     <table class="table table-striped table-hover">
         <thead>
             <tr>
@@ -33,4 +39,4 @@
         </tbody>
     </table>
 </div>
-<?php include __DIR__ . '/layout/footer.php'; ?>
+<?php include __DIR__ . '/../layout/footer.php'; ?>

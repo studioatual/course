@@ -19,12 +19,32 @@ class CustomerController extends Controller
     public function index(RequestInterface $request)
     {
         $customers = $this->model->all();
-        return $this->view('customer', ['title' => 'Customers', 'customers' => $customers]);
+        return $this->view('customers.index', [
+            'title' => 'Customers',
+            'customers' => $customers
+        ]);
+    }
+
+    public function create(RequestInterface $request)
+    {
+        return $this->view('customers.form', [
+            'title' => 'New Customer'
+        ]);
+    }
+
+    public function store(RequestInterface $request)
+    {
+        $params = $request->getParams();
+        $customer = $this->model->create($params);
     }
 
     public function show(RequestInterface $request)
     {
         $params = $request->getParams();
-        echo '<h1>Show Customer ' . $params['id'] . '</h1>';
+        $customer = $this->model->first($params['id']);
+        return $this->view('customers.form', [
+            'title' => 'New Customer',
+            'data' => $customer
+        ]);
     }
 }
