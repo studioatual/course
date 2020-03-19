@@ -2,27 +2,24 @@
 
 namespace Course\Core;
 
-trait Route {
+class Route
+{
+    protected $name;
+    protected $middlewares;
 
-    protected $routes = ['GET' => [], 'POST' => [], 'PUT' => [], 'DELETE' => []];
-
-    public function get(string $route, $action) {
-        $this->routes['GET'][] = ['url' => $route, 'action' => $action];
-        return $this;
+    public function __construct()
+    {
+        $this->middlewares = [];
     }
 
-    public function post(string $route, $action) {
-        $this->routes['POST'][] = ['url' => $route, 'action' => $action];
-        return $this;
+    public function setName($name)
+    {
+
     }
 
-    public function put(string $route, $action) {
-        $this->routes['PUT'][] = ['url' => $route, 'action' => $action];
-        return $this;
+    public function add()
+    {
+
     }
 
-    public function delete(string $route, $action) {
-        $this->routes['DELETE'][] = ['url' => $route, 'action' => $action];
-        return $this;
-    }
 }

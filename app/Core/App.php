@@ -6,7 +6,7 @@ use Course\Core\Contracts\ContainerInterface;
 
 class App
 {
-    use Route;
+    use RouteContainer;
 
     protected $container;
     protected $request;
