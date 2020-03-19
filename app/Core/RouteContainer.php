@@ -4,25 +4,33 @@ namespace Course\Core;
 
 trait RouteContainer
 {
-    protected $routes = ['GET' => [], 'POST' => [], 'PUT' => [], 'DELETE' => []];
+    protected $routes = [];
 
-    public function get(string $route, $action) {
-        $this->routes['GET'][] = ['url' => $route, 'action' => $action];
-        return $this;
+    public function get(string $url, $action)
+    {
+        $route = new Route('GET', $url, $action);
+        array_push($this->routes, $route);
+        return $route;
     }
 
-    public function post(string $route, $action) {
-        $this->routes['POST'][] = ['url' => $route, 'action' => $action];
-        return $this;
+    public function post(string $url, $action)
+    {
+        $route = new Route('POST', $url, $action);
+        array_push($this->routes, $route);
+        return $route;
     }
 
-    public function put(string $route, $action) {
-        $this->routes['PUT'][] = ['url' => $route, 'action' => $action];
-        return $this;
+    public function put(string $url, $action)
+    {
+        $route = new Route('PUT', $url, $action);
+        array_push($this->routes, $route);
+        return $route;
     }
 
-    public function delete(string $route, $action) {
-        $this->routes['DELETE'][] = ['url' => $route, 'action' => $action];
-        return $this;
+    public function delete(string $url, $action)
+    {
+        $route = new Route('DELETE', $url, $action);
+        array_push($this->routes, $route);
+        return $route;
     }
 }
