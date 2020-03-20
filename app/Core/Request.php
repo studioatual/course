@@ -33,9 +33,11 @@ class Request implements RequestInterface
 
     public function getRoute()
     {
+        $method = $this->getMethod();
+
         if (!$this->getURL()) {
-            $route = array_values(array_filter($this->routes, function (Route $route) {
-                if ($route->getMethod() == $this->getMethod() && ($route->getURL() == '[/]' || $route->getURL() == '/')) {
+            $route = array_values(array_filter($this->routes, function (Route $route) use ($method) {
+                if ($route->getMethod() == $method && ($route->getURL() == '[/]' || $route->getURL() == '/')) {
                     return $route;
                 }
             }));
@@ -43,55 +45,47 @@ class Request implements RequestInterface
         }
 
         $list = array_values(array_filter(explode('/', $this->getURL())));
-    }
-
-    /*
-    public function getRoute()
-    {
-        $url = $this->getURL();
-
-        if (!$url) {
-            $route = array_values(array_filter($this->routes[$this->getMethod()], function ($route) {
-                if ($route['url'] == '[/]' || $route['url'] == '/') {
-                    return $route;
-                }
-            }));
-            return $route[0];
-        }
-
-        $list = array_values(array_filter(explode('/', $this->getURL())));
-        $routes = $this->routes[$this->getMethod()];
+        $routes = $this->getRoutesWithMethod($method);
 
         for ($i = 0; $i < count($list); $i++) {
             if ($routes && count($routes)) {
                 $routes = $this->filterRoutesEqual($i, $list, $routes);
                 if (!$routes) {
-                    $routes = $this->filterRoutesParams($i, $list, $this->routes[$this->getMethod()]);
+                    $routes = $this->filterRoutesParams($i, $list, $this->getRoutesWithMethod($method));
                 }
             }
         }
 
         if (!$routes) {
-            return null;
+            return;
         }
 
         return $routes[0];
     }
-    */
-    private function filterRoutesEqual($i, $list, $routes)
+
+    private function getRoutesWithMethod(string $method)
     {
-        return array_values(array_filter($routes, function ($route) use ($i, $list) {
-            $r_list = array_values(array_filter(explode('/', $route['url'])));
+        return array_values(array_filter($this->routes, function (Route $route) use ($method) {
+            if ($route->getMethod() == $method) {
+                return $route;
+            }
+        }));
+    }
+
+    private function filterRoutesEqual(int $i, array $list, array $routes)
+    {
+        return array_values(array_filter($routes, function (Route $route) use ($i, $list) {
+            $r_list = array_values(array_filter(explode('/', $route->getURL())));
             if (count($r_list) == count($list) && isset($r_list[$i]) && $r_list[$i] == $list[$i]) {
                 return $route;
             }
         }));
     }
 
-    private function filterRoutesParams($i, $list, $routes)
+    private function filterRoutesParams(int $i, array $list, array $routes)
     {
         foreach ($routes as $route) {
-            $r_list = array_values(array_filter(explode('/', $route['url'])));
+            $r_list = array_values(array_filter(explode('/', $route->getURL())));
             if (count($r_list) == count($list) && isset($r_list[$i]) && strpos($r_list[$i], '{') !== false && strrpos($r_list[$i], '}') !== false) {
                 return [$route];
             }
@@ -101,7 +95,7 @@ class Request implements RequestInterface
     public function getParams()
     {
         $list = array_values(array_filter(explode('/', $this->getURL())));
-        $r_list = array_values(array_filter(explode('/', $this->getRoute()['url'])));
+        $r_list = array_values(array_filter(explode('/', $this->getRoute()->getURL())));
         $params = ($_POST) ? $_POST : [];
         for ($i = 0; $i < count($list); $i++) {
 

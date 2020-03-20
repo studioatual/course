@@ -33,7 +33,9 @@ class Route
         if (is_callable($this->action)) {
             return $this->action;
         }
+
         $params = explode(':', $this->action);
+
         return [
             'controller' => 'Course\\Controllers\\' . str_replace('.', '\\', $params[0]),
             'method' => $params[1]

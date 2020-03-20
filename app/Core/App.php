@@ -22,15 +22,13 @@ class App
         $this->request->setRoutes($this->routes);
         $route = $this->request->getRoute();
         if ($route) {
-            if (is_string($route['action'])) {
-                $params = explode(':', $route['action']);
-                $action = str_replace('.', '\\', $params[0]);
-                $action = 'Course\\Controllers\\' . $action;
-                $controller = new $action($this->container);
-                $method = $params[1];
-                return $controller->{$method}($this->request);
+            if (is_callable($route->getAction())) {
+                return $route->getAction()($this->request);
             }
-            return $route['action']($this->request);
+            $p_controller = $route->getAction()['controller'];
+            $p_method = $route->getAction()['method'];
+            $controller = new $p_controller($this->container);
+            return $controller->{$p_method}($this->request);
         } else {
             echo '<h1>Not Found</h1>';
         }
