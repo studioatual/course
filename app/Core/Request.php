@@ -33,6 +33,21 @@ class Request implements RequestInterface
 
     public function getRoute()
     {
+        if (!$this->getURL()) {
+            $route = array_values(array_filter($this->routes, function (Route $route) {
+                if ($route->getMethod() == $this->getMethod() && ($route->getURL() == '[/]' || $route->getURL() == '/')) {
+                    return $route;
+                }
+            }));
+            return $route[0];
+        }
+
+        $list = array_values(array_filter(explode('/', $this->getURL())));
+    }
+
+    /*
+    public function getRoute()
+    {
         $url = $this->getURL();
 
         if (!$url) {
@@ -62,7 +77,7 @@ class Request implements RequestInterface
 
         return $routes[0];
     }
-
+    */
     private function filterRoutesEqual($i, $list, $routes)
     {
         return array_values(array_filter($routes, function ($route) use ($i, $list) {

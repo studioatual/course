@@ -18,10 +18,37 @@ class Route
         $this->middlewares = [];
     }
 
+    public function getMethod()
+    {
+        return $this->method;
+    }
+
+    public function getURL()
+    {
+        return $this->url;
+    }
+
+    public function getAction()
+    {
+        if (is_callable($this->action)) {
+            return $this->action;
+        }
+        $params = explode(':', $this->action);
+        return [
+            'controller' => 'Course\\Controllers\\' . str_replace('.', '\\', $params[0]),
+            'method' => $params[1]
+        ];
+    }
+
     public function setName($name)
     {
         $this->name = $name;
         return $this;
+    }
+
+    public function getName()
+    {
+        return $this->name;
     }
 
     public function add($middlewares)
