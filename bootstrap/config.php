@@ -7,7 +7,7 @@ $container->set('settings', [
         'url' => 'https://course.test',
     ],
     'db' => [
-        'host' => '127.0.0.1',
+        'host' => 'oracledb',
         'port' => '1521',
         'database' => 'xe',
         'username' => 'course',

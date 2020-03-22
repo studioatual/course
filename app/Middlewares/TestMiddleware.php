@@ -2,11 +2,12 @@
 
 namespace Course\Middlewares;
 
+use Course\Core\Contracts\RequestInterface;
+
 class TestMiddleware extends Middleware
 {
-    public function __invoke($request)
+    public function __invoke(RequestInterface $request, $next)
     {
-        echo 'Test';
-        die();
+        return $next($request);
     }
 }

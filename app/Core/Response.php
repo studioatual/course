@@ -4,5 +4,4 @@ namespace Course\Core;
 
 class Response
 {
-
 }
