@@ -1,11 +1,10 @@
 <?php
 
 use Course\Core\Contracts\RequestInterface;
+use Course\Middlewares\TestMiddleware;
 
 $app->get('/customers', 'CustomerController:index')
-    ->setName('customers.index')
-    ->add(function (RequestInterface $request, $response, $next) {
-    });
+    ->setName('customers.index')->add(new TestMiddleware($container));
 $app->get('/customers/create', 'CustomerController:create')->setName('customers.create');
 $app->post('/customers', 'CustomerController:store');
 $app->get('/customers/{id}', 'CustomerController:show')->setName('customers.show');

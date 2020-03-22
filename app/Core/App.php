@@ -22,9 +22,14 @@ class App
         $this->request->setRoutes($this->routes);
         $route = $this->request->getRoute();
         if ($route) {
+            foreach ($route->getMiddlewares() as $middleware) {
+                $middleware($this->request);
+            }
+
             if (is_callable($route->getAction())) {
                 return $route->getAction()($this->request);
             }
+
             $p_controller = $route->getAction()['controller'];
             $p_method = $route->getAction()['method'];
             $controller = new $p_controller($this->container);

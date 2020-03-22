@@ -58,4 +58,9 @@ class Route
         $this->middlewares[] = $middlewares;
         return $this;
     }
+
+    public function getMiddlewares()
+    {
+        return $this->middlewares;
+    }
 }
