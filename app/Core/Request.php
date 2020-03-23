@@ -7,6 +7,29 @@ use Course\Core\Contracts\RequestInterface;
 class Request implements RequestInterface
 {
     protected $routes;
+    protected $sel;
+    protected $container;
+
+    public function __construct($container)
+    {
+        $this->container = $container;
+        $this->sel = 0;
+    }
+
+    public function getSel()
+    {
+        return $this->sel;
+    }
+
+    public function setSel($value)
+    {
+        $this->sel = $value;
+    }
+
+    public function getContainer()
+    {
+        return $this->container;
+    }
 
     public function getURL()
     {

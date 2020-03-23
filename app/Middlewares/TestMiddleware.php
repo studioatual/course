@@ -6,8 +6,8 @@ use Course\Core\Contracts\RequestInterface;
 
 class TestMiddleware extends Middleware
 {
-    public function __invoke(RequestInterface $request, $next)
+    public function __invoke(RequestInterface $request, $response, $next)
     {
-        return $next($request);
+        //return $next($request, $response);
     }
 }
